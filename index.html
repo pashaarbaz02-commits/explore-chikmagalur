@@ -123,4 +123,12 @@ let dp;const ib=document.getElementById('install');
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;ib.style.display='block'});
 ib.onclick=async()=>{dp.prompt();await dp.userChoice;ib.style.display='none'};
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
-</script></body></html>
+</script><script>
+(function(){var h=document.querySelector('header.top');if(!h)return;h.style.cursor='pointer';h.setAttribute('role','button');h.setAttribute('aria-label','Refresh app');
+h.addEventListener('click',function(e){if(e.target.closest('#install'))return;
+var web=/^https?:$/.test(location.protocol);
+var p=[];if(web){if(navigator.serviceWorker)p.push(navigator.serviceWorker.getRegistrations().then(function(r){return Promise.all(r.map(function(x){return x.unregister()}))}));
+if(window.caches)p.push(caches.keys().then(function(k){return Promise.all(k.map(function(x){return caches.delete(x)}))}));}
+Promise.all(p).catch(function(){}).then(function(){if(web){var u=new URL(location.href);u.searchParams.set('r',Date.now());location.replace(u.toString())}else{location.reload()}})});})();
+</script>
+</body></html>
